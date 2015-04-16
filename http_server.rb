@@ -16,7 +16,13 @@ loop do
   connection.puts "Content-Type: text/html"
   connection.puts "Server: My Http Server"
   connection.puts
-  connection.puts "Hi there, greetings from the server!"
+
+  File.open("documents/hello_world.html", "r") do |f|
+    f.each_line do |line|
+      connection.puts line
+    end
+  end
+
   connection.close
   puts "Response sent and connection closed."
 end
