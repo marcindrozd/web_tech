@@ -6,9 +6,10 @@ puts "HTTP Server ready to accept requests!"
 loop do
   connection = server.accept
   puts "Opening a connection for request:"
+  message_line = connection.gets
+  requested_path = message_line.split[1]
 
   while message_line = connection.gets
-    request_line = message_line.split if message_line =~ /GET/
     puts message_line
     break if message_line.chomp == ""
   end
@@ -20,13 +21,13 @@ loop do
   connection.puts "Server: My Http Server"
   connection.puts
 
-  requested_document = request_line[1]
-
-  File.open("documents#{requested_document}", "r") do |f|
-    f.each_line do |line|
+  File.open("documents#{requested_path}", "r") do |file|
+    file.each do |line|
       connection.puts line
     end
   end
+
+  puts requested_path
 
   connection.close
   puts "Response sent and connection closed."
