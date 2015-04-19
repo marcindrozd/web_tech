@@ -14,10 +14,17 @@ loop do
     break if message_line.chomp == ""
   end
 
+  extension = requested_path.split(".")[-1]
+  content_type = case extension
+    when 'html' then 'text/html'
+    when 'css' then 'text/css'
+    when 'jpg' then 'image/jpeg'
+  end
+
   puts "Sending response.."
   connection.puts "HTTP/1.1 200 OK"
   connection.puts "Date: #{Time.now.ctime}"
-  connection.puts "Content-Type: text/html"
+  connection.puts "Content-Type: #{content_type}"
   connection.puts "Server: My Http Server"
   connection.puts
 
